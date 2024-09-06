@@ -6,6 +6,7 @@ import com.totex.user.infrastructure.entity.UserEntity;
 import com.totex.user.infrastructure.exceptions.ConflictException;
 import com.totex.user.infrastructure.exceptions.ResourceNotFoundException;
 import com.totex.user.infrastructure.repository.UserRepository;
+import com.totex.user.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserConverter userConverter;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public UserDto saveUser(UserDto userDto) {
         emailExists(userDto.getEmail());
@@ -47,5 +49,17 @@ public class UserService {
 
     public void deleteUserByEmail(String email) {
         userRepository.deleteByEmail(email);
+    }
+
+    public UserDto updateUser(String token, UserDto userDto) {
+        String email = jwtUtil.extractEmailToken(token.substring(7));
+
+        userDto.setPassword(userDto.getPassword() != null ? passwordEncoder.encode(userDto.getPassword()) : null);
+
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email not found."));
+
+        UserEntity user = userConverter.updateUser(userDto, userEntity);
+
+        return userConverter.convertToUserDto(userRepository.save(user));
     }
 }
