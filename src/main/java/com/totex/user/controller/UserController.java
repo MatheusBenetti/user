@@ -1,6 +1,8 @@
 package com.totex.user.controller;
 
 import com.totex.user.business.UserService;
+import com.totex.user.business.dto.AddressDto;
+import com.totex.user.business.dto.PhoneDto;
 import com.totex.user.business.dto.UserDto;
 import com.totex.user.infrastructure.entity.UserEntity;
 import com.totex.user.infrastructure.security.JwtUtil;
@@ -35,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<UserEntity> getUserByEmail(@RequestParam("email") String email) {
+    public ResponseEntity<UserDto> getUserByEmail(@RequestParam("email") String email) {
         return ResponseEntity.ok(userService.findUserByEmail(email));
     }
 
@@ -48,5 +50,15 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(userService.updateUser(token, userDto));
+    }
+
+    @PutMapping("/address")
+    public ResponseEntity<AddressDto> updateAddress(@RequestBody AddressDto addressDto, @RequestParam("id") Long id) {
+        return ResponseEntity.ok(userService.updateAddress(id, addressDto));
+    }
+
+    @PutMapping("/phone")
+    public ResponseEntity<PhoneDto> updatePhone(@RequestBody PhoneDto phoneDto, @RequestParam("id") Long id) {
+        return ResponseEntity.ok(userService.updatePhone(id, phoneDto));
     }
 }
