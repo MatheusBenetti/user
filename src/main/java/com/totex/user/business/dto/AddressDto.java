@@ -10,9 +10,11 @@ import lombok.*;
 @Builder
 public class AddressDto {
 
+    private Long id;
+
     private String street;
 
-    private int number;
+    private Long number;
 
     private String complement;
 

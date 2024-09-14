@@ -20,7 +20,7 @@ public class AddressEntity {
     private String street;
 
     @Column(name = "number", length = 10)
-    private int number;
+    private Long number;
 
     @Column(name = "complement", length = 100)
     private String complement;
@@ -33,5 +33,8 @@ public class AddressEntity {
 
     @Column(name = "zipCode", length = 9)
     private String zipCode;
+
+    @Column(name = "user_id")
+    private Long userId;
 
 }
