@@ -61,4 +61,14 @@ public class UserController {
     public ResponseEntity<PhoneDto> updatePhone(@RequestBody PhoneDto phoneDto, @RequestParam("id") Long id) {
         return ResponseEntity.ok(userService.updatePhone(id, phoneDto));
     }
+
+    @PostMapping("/address")
+    public ResponseEntity<AddressDto> registerAddress(@RequestBody AddressDto addressDto, @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(userService.registerAddress(token, addressDto));
+    }
+
+    @PostMapping("/phone")
+    public ResponseEntity<PhoneDto> registerPhone(@RequestBody PhoneDto phoneDto, @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(userService.registerPhone(token, phoneDto));
+    }
 }

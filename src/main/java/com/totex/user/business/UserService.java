@@ -91,4 +91,17 @@ public class UserService {
         return userConverter.convertToPhoneDto(phoneRepository.save(phone));
     }
 
+    public AddressDto registerAddress(String token, AddressDto addressDto) {
+        String email = jwtUtil.extractEmailToken(token.substring(7));
+        UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email not found."));
+        AddressEntity address = userConverter.convertToAddressEntity(addressDto, user.getId());
+        return userConverter.convertToAddressDto(addressRepository.save(address));
+    }
+
+    public PhoneDto registerPhone(String token, PhoneDto phoneDto) {
+        String email = jwtUtil.extractEmailToken(token.substring(7));
+        UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email not found."));
+        PhoneEntity phone = userConverter.convertToPhoneEntity(phoneDto, user.getId());
+        return userConverter.convertToPhoneDto(phoneRepository.save(phone));
+    }
 }
